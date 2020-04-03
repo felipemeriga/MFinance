@@ -32,12 +32,20 @@ public class CategoryService {
         return categoryRepository.findAll(pageable);
     }
 
-    public Optional<Category> get(Predicate predicate) {
+    public Optional<Category> get(Long id) {
+        return categoryRepository.findById(id);
+    }
+
+    public Optional<Category> getByPredicate(Predicate predicate) {
         return categoryRepository.findOne(predicate);
     }
 
     public Category save(Category category) { ;
         return categoryRepository.save(category);
+    }
+
+    public void delete(Category category) {
+        categoryRepository.delete(category);
     }
 
 }

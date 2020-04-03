@@ -5,7 +5,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
-import java.time.Instant;
+import java.sql.Date;
 import java.util.Objects;
 
 /**
@@ -28,7 +28,7 @@ public class Category implements Serializable {
 
 
     @Column(name = "created_when")
-    private Instant createdWhen = null;
+    private Date createdWhen;
 
     public Long getId() {
         return id;
@@ -46,11 +46,11 @@ public class Category implements Serializable {
         this.name = name;
     }
 
-    public Instant getCreatedWhen() {
+    public Date getCreatedWhen() {
         return createdWhen;
     }
 
-    public void setCreatedWhen(Instant createdWhen) {
+    public void setCreatedWhen(Date createdWhen) {
         this.createdWhen = createdWhen;
     }
 
