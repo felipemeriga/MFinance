@@ -47,6 +47,11 @@ public class CategoryController {
         return new ResponseEntity<>(page, headers, HttpStatus.OK);
     }
 
+    /**+
+     *
+     * @param id
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)}
+     */
     @GetMapping("{id}")
     public ResponseEntity<Category> get(@PathVariable("id") Long id) {
         Category category = categoryService.get(id)
@@ -54,7 +59,11 @@ public class CategoryController {
         return new ResponseEntity<>(category, HttpStatus.OK);
     }
 
-
+    /**+
+     *
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)}
+     * @param category
+     */
     @PostMapping
     public ResponseEntity<Category> create(@Valid @RequestBody Category category) {
         QCategory qCategory = QCategory.category;
@@ -67,6 +76,12 @@ public class CategoryController {
         return new ResponseEntity<>(categoryService.save(category), HttpStatus.OK);
     }
 
+    /***
+     *
+     * @param category
+     * @param id
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)}
+     */
     @PutMapping("{id}")
     public ResponseEntity<Category> update(@Valid @RequestBody Category category, @PathVariable("id") Long id) {
         Optional<Category> optionalCategory = categoryService.get(id);
@@ -78,6 +93,10 @@ public class CategoryController {
         return new ResponseEntity<>(categoryService.save(category), HttpStatus.OK);
     }
 
+    /***
+     *
+     * @param id
+     */
     @DeleteMapping("{id}")
     public void delete(@PathVariable("id") Long id) {
         Category category = categoryService.get(id)
