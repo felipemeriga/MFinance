@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.persistence.EntityExistsException;
+import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 import java.sql.SQLIntegrityConstraintViolationException;
@@ -32,6 +33,10 @@ public class CategoryController {
     private final Logger log = LoggerFactory.getLogger(CategoryController.class);
 
     @Autowired
+    private EntityManagerFactory entityManagerFactory;
+
+
+    @Autowired
     private CategoryService categoryService;
 
     /**
@@ -42,6 +47,7 @@ public class CategoryController {
      */
     @GetMapping
     public ResponseEntity<Page<Category>> list(Pageable pageable) {
+
         final Page<Category> page = categoryService.getAllCategories(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return new ResponseEntity<>(page, headers, HttpStatus.OK);

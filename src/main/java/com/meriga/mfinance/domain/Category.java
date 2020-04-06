@@ -1,20 +1,10 @@
 package com.meriga.mfinance.domain;
 
-
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.sql.Date;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
 
 /**
  * A category.
@@ -23,7 +13,7 @@ import java.util.Set;
 @Table(name = "category")
 public class Category implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = -558553967080513790L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -33,11 +23,6 @@ public class Category implements Serializable {
     @Size(max = 50)
     @Column(length = 50)
     private String name;
-
-    // Has to be BackReference and LAZY, otherwise will make a recursion between entities
-    @OneToMany(mappedBy="category",fetch=FetchType.LAZY)
-    @JsonBackReference
-    private List<Planning> plannings = new ArrayList<Planning>();
 
     @Column(name = "created_when")
     private Date createdWhen;
@@ -64,13 +49,5 @@ public class Category implements Serializable {
 
     public void setCreatedWhen(Date createdWhen) {
         this.createdWhen = createdWhen;
-    }
-
-    public List<Planning> getPlannings() {
-        return plannings;
-    }
-
-    public void setPlannings(List<Planning> plannings) {
-        this.plannings = plannings;
     }
 }

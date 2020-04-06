@@ -2,33 +2,50 @@ package com.meriga.mfinance.domain;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Date;
-import java.util.Objects;
+
 
 /**
- * A planning.
+ * A inbound or outbound flux.
  */
 @Entity
-@Table(name = "planning")
-public class Planning implements Serializable {
+@Table(name = "flux")
+public class Flux implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy =GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @NotNull
     private BigDecimal value;
 
-
     @Column(name = "date")
+    @NotNull
     private Date date;
 
     @ManyToOne(fetch = FetchType.EAGER)
+    @NotNull
     private Category category;
+
+
+    @NotNull
+    @Size(max = 50)
+    @Column(length = 50)
+    private String name;
+
+    @NotNull
+    @Size(max = 10)
+    @Column(length = 10)
+    private String flow;
+
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
 
     public Long getId() {
         return id;
@@ -62,29 +79,19 @@ public class Planning implements Serializable {
         this.category = category;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Planning planning = (Planning) o;
-        return Objects.equals(id, planning.id) &&
-            Objects.equals(value, planning.value) &&
-            Objects.equals(date, planning.date) &&
-            Objects.equals(category, planning.category);
+    public String getName() {
+        return name;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, value, date, category);
+    public void setName(String name) {
+        this.name = name;
     }
 
-    @Override
-    public String toString() {
-        return "Planning{" +
-            "id=" + id +
-            ", value=" + value +
-            ", date=" + date +
-            ", category=" + category +
-            '}';
+    public String getFlow() {
+        return flow;
+    }
+
+    public void setFlow(String flow) {
+        this.flow = flow;
     }
 }

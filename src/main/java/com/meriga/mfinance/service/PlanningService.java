@@ -16,7 +16,7 @@ import java.util.Optional;
 
 
 /**
- * Service class for managing users.
+ * Service class for managing plannings.
  */
 @Service
 @Transactional
