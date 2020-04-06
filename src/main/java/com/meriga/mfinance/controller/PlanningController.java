@@ -24,6 +24,9 @@ import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 import java.sql.SQLIntegrityConstraintViolationException;
+import java.time.LocalDate;
+import java.time.YearMonth;
+import java.util.GregorianCalendar;
 import java.util.Optional;
 
 @RestController
@@ -70,11 +73,17 @@ public class PlanningController {
     public ResponseEntity<Planning> create(@Valid @RequestBody Planning planning) {
         QPlanning qPlanning = QPlanning.planning;
 
-//        Predicate predicate = qPlanning.name.eq(category.getName());
-//        Optional<Category> categoryOptional = categoryService.getByPredicate(predicate);
-//        if (categoryOptional.isPresent())
-//            throw new EntityExistsException("The category with the current name, " + category.getName() + " already" +
-//                "exists");
+        YearMonth yearMonth = YearMonth.of( planning.getDate().toLocalDate().getYear(), planning.getDate().toLocalDate().getMonth());
+        LocalDate firstOfMonth = yearMonth.atDay( 1 );
+        LocalDate last = yearMonth.atEndOfMonth();
+
+        Predicate predicate = qPlanning.date.between(java.sql.Date.valueOf(firstOfMonth), java.sql.Date.valueOf(last))
+            .and(qPlanning.category.id.eq(planning.getCategory().getId()));
+
+        Optional<Planning> planningOptional = planningService.getByPredicate(predicate);
+        if (planningOptional.isPresent())
+            throw new EntityExistsException("There is already a planning of that category within the informed month" +
+                "please create in another month or update that");
 
         return new ResponseEntity<>(planningService.save(planning), HttpStatus.OK);
     }

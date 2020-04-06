@@ -1,7 +1,9 @@
 package com.meriga.mfinance.domain;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javax.persistence.*;
@@ -19,7 +21,6 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "category")
-@JsonIdentityInfo(generator= ObjectIdGenerators.PropertyGenerator.class, property="id")
 public class Category implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -33,7 +34,9 @@ public class Category implements Serializable {
     @Column(length = 50)
     private String name;
 
-    @OneToMany(mappedBy="category",fetch=FetchType.EAGER)
+    // Has to be BackReference and LAZY, otherwise will make a recursion between entities
+    @OneToMany(mappedBy="category",fetch=FetchType.LAZY)
+    @JsonBackReference
     private List<Planning> plannings = new ArrayList<Planning>();
 
     @Column(name = "created_when")

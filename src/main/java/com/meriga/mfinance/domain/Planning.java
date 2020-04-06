@@ -1,7 +1,9 @@
 package com.meriga.mfinance.domain;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javax.persistence.*;
@@ -16,7 +18,6 @@ import java.util.Objects;
  */
 @Entity
 @Table(name = "planning")
-@JsonIdentityInfo(generator= ObjectIdGenerators.PropertyGenerator.class, property="id")
 public class Planning implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -32,7 +33,8 @@ public class Planning implements Serializable {
     @Column(name = "date")
     private Date date;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JsonManagedReference
     private Category category;
 
     public Long getId() {
