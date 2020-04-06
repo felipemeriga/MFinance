@@ -1,24 +1,31 @@
 package com.meriga.mfinance.domain;
 
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * A category.
  */
 @Entity
 @Table(name = "category")
+@JsonIdentityInfo(generator= ObjectIdGenerators.PropertyGenerator.class, property="id")
 public class Category implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @NotNull
@@ -26,6 +33,8 @@ public class Category implements Serializable {
     @Column(length = 50)
     private String name;
 
+    @OneToMany(mappedBy="category",fetch=FetchType.EAGER)
+    private List<Planning> plannings = new ArrayList<Planning>();
 
     @Column(name = "created_when")
     private Date createdWhen;
@@ -54,27 +63,11 @@ public class Category implements Serializable {
         this.createdWhen = createdWhen;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Category category = (Category) o;
-        return Objects.equals(id, category.id) &&
-            Objects.equals(name, category.name) &&
-            Objects.equals(createdWhen, category.createdWhen);
+    public List<Planning> getPlannings() {
+        return plannings;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, name, createdWhen);
-    }
-
-    @Override
-    public String toString() {
-        return "Category{" +
-            "id=" + id +
-            ", name='" + name + '\'' +
-            ", createdWhen=" + createdWhen +
-            '}';
+    public void setPlannings(List<Planning> plannings) {
+        this.plannings = plannings;
     }
 }

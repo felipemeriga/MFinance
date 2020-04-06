@@ -56,7 +56,7 @@ spring:
   jpa:
     show-sql: true
     properties:
-      hibernate.id.new_generator_mappings: true
+      hibernate.id.new_generator_mappings: false
       hibernate.connection.provider_disables_autocommit: true
       hibernate.cache.use_second_level_cache: false
       hibernate.cache.use_query_cache: false
