@@ -22,7 +22,7 @@ import java.util.Set;
  * A user.
  */
 @Entity
-@Table(name = "jhi_user")
+@Table(name = "user")
 @org.springframework.data.elasticsearch.annotations.Document(indexName = "user")
 public class User extends AbstractAuditingEntity implements Serializable {
 
