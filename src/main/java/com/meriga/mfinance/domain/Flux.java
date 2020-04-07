@@ -3,7 +3,6 @@ package com.meriga.mfinance.domain;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Date;
 
@@ -13,13 +12,7 @@ import java.sql.Date;
  */
 @Entity
 @Table(name = "flux")
-public class Flux implements Serializable {
-
-    private static final long serialVersionUID = 1L;
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+public class Flux extends AbstractEntity {
 
     private BigDecimal value;
 
@@ -41,19 +34,6 @@ public class Flux implements Serializable {
     @Size(max = 10)
     @Column(length = 10)
     private String flow;
-
-
-    public static long getSerialVersionUID() {
-        return serialVersionUID;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public BigDecimal getValue() {
         return value;

@@ -11,13 +11,7 @@ import java.sql.Date;
  */
 @Entity
 @Table(name = "category")
-public class Category implements Serializable {
-
-    private static final long serialVersionUID = -558553967080513790L;
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+public class Category extends AbstractEntity {
 
     @NotNull
     @Size(max = 50)
@@ -26,14 +20,6 @@ public class Category implements Serializable {
 
     @Column(name = "created_when")
     private Date createdWhen;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;

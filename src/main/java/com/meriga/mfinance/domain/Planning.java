@@ -12,13 +12,7 @@ import java.util.Objects;
  */
 @Entity
 @Table(name = "planning")
-public class Planning implements Serializable {
-
-    private static final long serialVersionUID = 1L;
-
-    @Id
-    @GeneratedValue(strategy =GenerationType.AUTO)
-    private Long id;
+public class Planning extends AbstractEntity {
 
     @NotNull
     private BigDecimal value;
@@ -30,13 +24,7 @@ public class Planning implements Serializable {
     @ManyToOne(fetch = FetchType.EAGER)
     private Category category;
 
-    public Long getId() {
-        return id;
-    }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public BigDecimal getValue() {
         return value;
@@ -62,29 +50,5 @@ public class Planning implements Serializable {
         this.category = category;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Planning planning = (Planning) o;
-        return Objects.equals(id, planning.id) &&
-            Objects.equals(value, planning.value) &&
-            Objects.equals(date, planning.date) &&
-            Objects.equals(category, planning.category);
-    }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, value, date, category);
-    }
-
-    @Override
-    public String toString() {
-        return "Planning{" +
-            "id=" + id +
-            ", value=" + value +
-            ", date=" + date +
-            ", category=" + category +
-            '}';
-    }
 }
