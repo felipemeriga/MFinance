@@ -48,7 +48,7 @@ public class CategoryController {
     @GetMapping
     public ResponseEntity<Page<Category>> list(Pageable pageable) {
 
-        final Page<Category> page = categoryService.getAllCategories(pageable);
+        final Page<Category> page = categoryService.getAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return new ResponseEntity<>(page, headers, HttpStatus.OK);
     }
