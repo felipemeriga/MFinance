@@ -7,6 +7,6 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 /**
  * Spring Data JPA repository for the {@link Flux} entity.
  */
-public interface FluxRepository extends PagingAndSortingRepository<Flux, Long>, QuerydslPredicateExecutor<Flux> {
+public interface FluxRepository extends CommonRepository<Flux, Long> {
 }
 

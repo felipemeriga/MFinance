@@ -20,31 +20,14 @@ import java.util.Optional;
  */
 @Service
 @Transactional
-public class FluxService {
+public class FluxService extends AbstractService<Flux, Long, FluxRepository>{
 
     private final Logger log = LoggerFactory.getLogger(FluxService.class);
 
     @Autowired
     private FluxRepository fluxRepository;
 
-    public Page<Flux> getAllCategories(Pageable pageable) {
-        return fluxRepository.findAll(pageable);
+    public FluxService(FluxRepository repository) {
+        super(repository);
     }
-
-    public Optional<Flux> get(Long id) {
-        return fluxRepository.findById(id);
-    }
-
-    public Optional<Flux> getByPredicate(Predicate predicate) {
-        return fluxRepository.findOne(predicate);
-    }
-
-    public Flux save(Flux flux) { ;
-        return fluxRepository.save(flux);
-    }
-
-    public void delete(Flux flux) {
-        fluxRepository.delete(flux);
-    }
-
 }

@@ -12,7 +12,7 @@ import java.sql.Date;
  */
 @Entity
 @Table(name = "flux")
-public class Flux extends AbstractEntity {
+public class Flux extends AbstractEntity<Long> {
 
     private BigDecimal value;
 

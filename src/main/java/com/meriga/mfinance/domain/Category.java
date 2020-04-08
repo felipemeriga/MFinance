@@ -11,7 +11,7 @@ import java.sql.Date;
  */
 @Entity
 @Table(name = "category")
-public class Category extends AbstractEntity {
+public class Category extends AbstractEntity<Long> {
 
     @NotNull
     @Size(max = 50)

@@ -7,6 +7,6 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 /**
  * Spring Data JPA repository for the {@link Planning} entity.
  */
-public interface PlanningRepository extends PagingAndSortingRepository<Planning, Long>, QuerydslPredicateExecutor<Planning> {
+public interface PlanningRepository extends CommonRepository<Planning, Long> {
 }
 

@@ -39,7 +39,7 @@ public class FluxController {
      */
     @GetMapping
     public ResponseEntity<Page<Flux>> list(Pageable pageable) {
-        final Page<Flux> page = fluxService.getAllCategories(pageable);
+        final Page<Flux> page = fluxService.getAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return new ResponseEntity<>(page, headers, HttpStatus.OK);
     }

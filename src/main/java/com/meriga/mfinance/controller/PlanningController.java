@@ -47,7 +47,7 @@ public class PlanningController {
      */
     @GetMapping
     public ResponseEntity<Page<Planning>> list(Pageable pageable) {
-        final Page<Planning> page = planningService.getAllCategories(pageable);
+        final Page<Planning> page = planningService.getAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return new ResponseEntity<>(page, headers, HttpStatus.OK);
     }

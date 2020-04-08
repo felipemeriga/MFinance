@@ -12,7 +12,7 @@ import java.util.Objects;
  */
 @Entity
 @Table(name = "planning")
-public class Planning extends AbstractEntity {
+public class Planning extends AbstractEntity<Long> {
 
     @NotNull
     private BigDecimal value;
