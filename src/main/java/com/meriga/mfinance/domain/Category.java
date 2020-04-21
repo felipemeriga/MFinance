@@ -1,10 +1,12 @@
 package com.meriga.mfinance.domain;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.io.Serializable;
 import java.sql.Date;
+import java.sql.Timestamp;
 
 /**
  * A category.
@@ -18,8 +20,9 @@ public class Category extends AbstractEntity<Long> {
     @Column(length = 50)
     private String name;
 
-    @Column(name = "created_when")
-    private Date createdWhen;
+    @Column(name = "updated_when")
+    @UpdateTimestamp
+    private Timestamp updatedWhen;
 
     public String getName() {
         return name;
@@ -29,11 +32,11 @@ public class Category extends AbstractEntity<Long> {
         this.name = name;
     }
 
-    public Date getCreatedWhen() {
-        return createdWhen;
+    public Timestamp getUpdatedWhen() {
+        return updatedWhen;
     }
 
-    public void setCreatedWhen(Date createdWhen) {
-        this.createdWhen = createdWhen;
+    public void setUpdatedWhen(Timestamp updatedWhen) {
+        this.updatedWhen = updatedWhen;
     }
 }

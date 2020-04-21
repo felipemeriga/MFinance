@@ -1,4 +1,4 @@
-create table category (id bigint AUTO_INCREMENT PRIMARY KEY, name VARCHAR(50) NOT NULL,created_when DATE);
+create table category (id bigint AUTO_INCREMENT PRIMARY KEY, name VARCHAR(50) NOT NULL,created_when DATE, updated_when datetime not null);
 
 create table planning (id bigint AUTO_INCREMENT PRIMARY KEY, value DECIMAL(10,2) NOT NULL, date DATE NOT NULL,
 category_id bigint NOT NULL, FOREIGN KEY (category_id) REFERENCES category(id));

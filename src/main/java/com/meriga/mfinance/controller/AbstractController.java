@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -68,8 +69,8 @@ public abstract class AbstractController<E extends AbstractEntity, T, S extends 
     public ResponseEntity<E> update(@Valid @RequestBody E e, @PathVariable("id") T id) {
         Optional<E> optionalEntity = service.get(id);
         if (!optionalEntity.isPresent()) {
-            throw new EntityNotFoundException("The entity  with the current id, " + e.getId() + " doesn't" +
-                "exists");
+            throw new EntityNotFoundException("The entity  with the current id, " + id + " doesn't" +
+                " exists");
         }
         e.setId(id);
         return new ResponseEntity<>(service.save(e), HttpStatus.OK);
