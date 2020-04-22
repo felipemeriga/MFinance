@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityExistsException;
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Optional;
 import com.querydsl.core.types.Predicate;
 
@@ -38,7 +39,6 @@ public class CategoryController extends AbstractController<Category, Long, Categ
     @Override
     public ResponseEntity<Category> save(@Valid @RequestBody Category category) {
         QCategory qCategory = QCategory.category;
-
         Predicate predicate = qCategory.name.eq(category.getName());
         Optional<Category> categoryOptional = categoryService.getByPredicate(predicate);
         if (categoryOptional.isPresent())

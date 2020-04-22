@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 public interface CommonController<E extends AbstractEntity, T> {
     @PostMapping
@@ -24,4 +25,8 @@ public interface CommonController<E extends AbstractEntity, T> {
 
     @DeleteMapping("{id}")
     void delete(@PathVariable("id") T id);
+
+    @DeleteMapping("delete/{ids}")
+    ResponseEntity<Void> massiveDelete(@PathVariable List<T> ids);
+
 }

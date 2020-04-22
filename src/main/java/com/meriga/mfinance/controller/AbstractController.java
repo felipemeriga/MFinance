@@ -9,7 +9,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -17,6 +16,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 import java.sql.SQLIntegrityConstraintViolationException;
+import java.util.List;
 import java.util.Optional;
 
 public abstract class AbstractController<E extends AbstractEntity, T, S extends CommonService<E,T>> implements CommonController<E, T> {
@@ -93,5 +93,27 @@ public abstract class AbstractController<E extends AbstractEntity, T, S extends 
                 throw new RuntimeException("Error: " + x.getMessage());
             }
         }
+    }
+
+    /**
+     * @param ids
+     * @return
+     */
+    @Override
+    public ResponseEntity<Void> massiveDelete(@PathVariable List<T> ids){
+        ids.forEach(id-> {
+            E e = service.get(id)
+                .orElseThrow(() -> new EntityNotFoundException("Entity with id: " + id + " not found."));
+            try {
+                service.delete(e);
+            } catch (Exception x) {
+                if (x instanceof SQLIntegrityConstraintViolationException | x instanceof DataIntegrityViolationException) {
+                    throw new ConstraintViolationException("Violating database constraints for this entity");
+                } else {
+                    throw new RuntimeException("Error: " + x.getMessage());
+                }
+            }
+        });
+        return ResponseEntity.ok().build();
     }
 }
