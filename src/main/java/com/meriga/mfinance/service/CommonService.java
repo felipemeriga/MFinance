@@ -13,6 +13,8 @@ public interface CommonService<E extends AbstractEntity, T> {
 
     Page<E> getAll(Pageable pageable);
 
+    Page<E> getAll(Predicate predicate, Pageable pageable);
+
     Optional<E> get(T id);
 
     Optional<E> getByPredicate(Predicate predicate);

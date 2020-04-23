@@ -12,9 +12,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
+import javax.annotation.Nullable;
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
+import javax.websocket.server.PathParam;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 import java.util.Optional;
@@ -41,7 +42,7 @@ public abstract class AbstractController<E extends AbstractEntity, T, S extends 
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body.
      */
     @Override
-    public ResponseEntity<Page<E>> list(Pageable pageable) {
+    public ResponseEntity<Page<E>> list(@Nullable @PathParam("search") String search, Pageable pageable) {
         final Page<E> page = service.getAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return new ResponseEntity<>(page, headers, HttpStatus.OK);

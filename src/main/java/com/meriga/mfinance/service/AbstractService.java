@@ -27,6 +27,11 @@ public abstract class AbstractService<E extends AbstractEntity, T, R extends Com
     }
 
     @Override
+    public Page<E> getAll(Predicate predicate, Pageable pageable) {
+        return repository.findAll(predicate, pageable);
+    }
+
+    @Override
     public Optional<E> get(T id) {
         return repository.findById(id);
     }
