@@ -86,10 +86,11 @@ public class PlanningController extends AbstractController<Planning, Long, Plann
     @Override
     public ResponseEntity<Planning> save(@Valid @RequestBody Planning planning) {
         QPlanning qPlanning = QPlanning.planning;
-
-        YearMonth yearMonth = YearMonth.of( planning.getDate().toLocalDate().getYear(), planning.getDate().toLocalDate().getMonth());
+        YearMonth yearMonth = YearMonth.of( LocalDate.now().getYear(),LocalDate.now().getMonth());
         LocalDate firstOfMonth = yearMonth.atDay( 1 );
         LocalDate last = yearMonth.atEndOfMonth();
+        Date date = java.sql.Date.valueOf(LocalDate.now());
+        planning.setDate(date);
 
         Predicate predicate = qPlanning.date.between(java.sql.Date.valueOf(firstOfMonth), java.sql.Date.valueOf(last))
             .and(qPlanning.category.id.eq(planning.getCategory().getId()));
