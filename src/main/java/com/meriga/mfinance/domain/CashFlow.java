@@ -11,8 +11,8 @@ import java.sql.Date;
  * A inbound or outbound flux.
  */
 @Entity
-@Table(name = "flux")
-public class Flux extends AbstractEntity<Long> {
+@Table(name = "cash_flow")
+public class CashFlow extends AbstractEntity<Long> {
 
     private BigDecimal value;
 

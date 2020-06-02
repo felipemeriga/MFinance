@@ -1,8 +1,8 @@
 package com.meriga.mfinance.service;
 
 
-import com.meriga.mfinance.domain.Flux;
-import com.meriga.mfinance.repository.FluxRepository;
+import com.meriga.mfinance.domain.CashFlow;
+import com.meriga.mfinance.repository.CashFlowRepository;
 import com.querydsl.core.types.Predicate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,14 +20,14 @@ import java.util.Optional;
  */
 @Service
 @Transactional
-public class FluxService extends AbstractService<Flux, Long, FluxRepository>{
+public class CashFlowService extends AbstractService<CashFlow, Long, CashFlowRepository>{
 
-    private final Logger log = LoggerFactory.getLogger(FluxService.class);
+    private final Logger log = LoggerFactory.getLogger(CashFlowService.class);
 
     @Autowired
-    private FluxRepository fluxRepository;
+    private CashFlowRepository cashFlowRepository;
 
-    public FluxService(FluxRepository repository) {
+    public CashFlowService(CashFlowRepository repository) {
         super(repository);
     }
 }
