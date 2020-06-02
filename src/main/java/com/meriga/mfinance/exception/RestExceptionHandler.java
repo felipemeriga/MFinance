@@ -216,13 +216,42 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
      */
     @ExceptionHandler(EntityExistsException.class)
     protected ResponseEntity<Object> handleEntityExistsException(EntityExistsException ex,
-                                                                      WebRequest request) {
+                                                                 WebRequest request) {
         ApiError apiError = new ApiError(HttpStatus.INTERNAL_SERVER_ERROR, ex);
         apiError.setMessage("There is already a planning of that category within the informed month");
         apiError.setDebugMessage(ex.getMessage());
         return buildResponseEntity(apiError);
     }
 
+    /**
+     * Handle CustomConstraintViolationException, when some database constraint is violated
+     *
+     * @param ex the CustomConstraintViolationException
+     * @return the ApiError object
+     */
+    @ExceptionHandler(CustomConstraintViolationException.class)
+    protected ResponseEntity<Object> handleCustomConstraintViolationException(CustomConstraintViolationException ex,
+                                                                 WebRequest request) {
+        ApiError apiError = new ApiError(HttpStatus.INTERNAL_SERVER_ERROR, ex);
+        apiError.setMessage(ex.getMessage());
+        apiError.setDebugMessage(ex.getMessage());
+        return buildResponseEntity(apiError);
+    }
+
+    /**
+     * Handle PlanningAlreadyExistsWithinMonth, when there is already a plan within the informed month
+     *
+     * @param ex the PlanningAlreadyExistsWithinMonth
+     * @return the ApiError object
+     */
+    @ExceptionHandler(PlanningAlreadyExistsWithinMonth.class)
+    protected ResponseEntity<Object> handlePlanningAlreadyExistsWithinMonth(PlanningAlreadyExistsWithinMonth ex,
+                                                                              WebRequest request) {
+        ApiError apiError = new ApiError(HttpStatus.INTERNAL_SERVER_ERROR, ex);
+        apiError.setMessage(ex.getMessage());
+        apiError.setDebugMessage(ex.getMessage());
+        return buildResponseEntity(apiError);
+    }
 
     private ResponseEntity<Object> buildResponseEntity(ApiError apiError) {
         return new ResponseEntity<Object>(apiError, (HttpStatus) apiError.getStatus());

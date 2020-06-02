@@ -1,7 +1,7 @@
 package com.meriga.mfinance.controller;
 
 import com.meriga.mfinance.domain.AbstractEntity;
-import com.meriga.mfinance.exception.ConstraintViolationException;
+import com.meriga.mfinance.exception.CustomConstraintViolationException;
 import com.meriga.mfinance.service.CommonService;
 import io.github.jhipster.web.util.PaginationUtil;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -89,7 +89,7 @@ public abstract class AbstractController<E extends AbstractEntity, T, S extends 
             service.delete(e);
         } catch (Exception x) {
             if (x instanceof SQLIntegrityConstraintViolationException | x instanceof DataIntegrityViolationException) {
-                throw new ConstraintViolationException("Violating database constraints for this entity");
+                throw new CustomConstraintViolationException("Can not delete, this item has dependencies");
             } else {
                 throw new RuntimeException("Error: " + x.getMessage());
             }
@@ -109,7 +109,7 @@ public abstract class AbstractController<E extends AbstractEntity, T, S extends 
                 service.delete(e);
             } catch (Exception x) {
                 if (x instanceof SQLIntegrityConstraintViolationException | x instanceof DataIntegrityViolationException) {
-                    throw new ConstraintViolationException("Violating database constraints for this entity");
+                    throw new CustomConstraintViolationException("Can not delete item with id: " + id + ", this item has dependencies");
                 } else {
                     throw new RuntimeException("Error: " + x.getMessage());
                 }

@@ -2,6 +2,7 @@ package com.meriga.mfinance.controller;
 
 import com.meriga.mfinance.domain.Planning;
 import com.meriga.mfinance.domain.QPlanning;
+import com.meriga.mfinance.exception.PlanningAlreadyExistsWithinMonth;
 import com.meriga.mfinance.service.PlanningService;
 import com.querydsl.core.types.Predicate;
 import org.slf4j.Logger;
@@ -21,6 +22,8 @@ import javax.websocket.server.PathParam;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.YearMonth;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.Optional;
 
 @RestController
@@ -97,9 +100,31 @@ public class PlanningController extends AbstractController<Planning, Long, Plann
 
         Optional<Planning> planningOptional = planningService.getByPredicate(predicate);
         if (planningOptional.isPresent())
-            throw new EntityExistsException("There is already a planning of that category within the informed month" +
+            throw new PlanningAlreadyExistsWithinMonth("There is already a planning of that category within the informed month" +
                 "please create in another month or update that");
 
         return new ResponseEntity<>(planningService.save(planning), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "validate/{categoryId}")
+    public ResponseEntity<Planning> validateCategoryAlreadyExistsWithinMonth(@PathVariable("categoryId") Long categoryId,
+                                                                             @PathParam("date") Date date) {
+        Calendar calendar = new GregorianCalendar();
+        calendar.setTime(date);
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH) + 1;
+
+        QPlanning qPlanning = QPlanning.planning;
+        YearMonth yearMonth = YearMonth.of(year,month);
+        LocalDate firstOfMonth = yearMonth.atDay( 1 );
+        LocalDate last = yearMonth.atEndOfMonth();
+
+        Predicate predicate = qPlanning.date.between(java.sql.Date.valueOf(firstOfMonth), java.sql.Date.valueOf(last))
+            .and(qPlanning.category.id.eq(categoryId));
+
+        Optional<Planning> planningOptional = planningService.getByPredicate(predicate);
+        Planning planning = planningOptional.isPresent() ? planningOptional.get() : new Planning();;
+
+        return new ResponseEntity<>(planning, HttpStatus.OK);
     }
 }
