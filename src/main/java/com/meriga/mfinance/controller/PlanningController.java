@@ -5,6 +5,7 @@ import com.meriga.mfinance.domain.QPlanning;
 import com.meriga.mfinance.exception.PlanningAlreadyExistsWithinMonth;
 import com.meriga.mfinance.service.PlanningService;
 import com.querydsl.core.types.Predicate;
+import net.bytebuddy.implementation.bytecode.Throw;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,32 +81,6 @@ public class PlanningController extends AbstractController<Planning, Long, Plann
         return new ResponseEntity<>(page, HttpStatus.OK);
     }
 
-    /**+
-     *
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)}
-     * @param planning
-     */
-    @PostMapping
-    @Override
-    public ResponseEntity<Planning> save(@Valid @RequestBody Planning planning) {
-        QPlanning qPlanning = QPlanning.planning;
-        YearMonth yearMonth = YearMonth.of( LocalDate.now().getYear(),LocalDate.now().getMonth());
-        LocalDate firstOfMonth = yearMonth.atDay( 1 );
-        LocalDate last = yearMonth.atEndOfMonth();
-        Date date = java.sql.Date.valueOf(LocalDate.now());
-        planning.setDate(date);
-
-        Predicate predicate = qPlanning.date.between(java.sql.Date.valueOf(firstOfMonth), java.sql.Date.valueOf(last))
-            .and(qPlanning.category.id.eq(planning.getCategory().getId()));
-
-        Optional<Planning> planningOptional = planningService.getByPredicate(predicate);
-        if (planningOptional.isPresent())
-            throw new PlanningAlreadyExistsWithinMonth("There is already a planning of that category within the informed month" +
-                "please create in another month or update that");
-
-        return new ResponseEntity<>(planningService.save(planning), HttpStatus.OK);
-    }
-
     @GetMapping(value = "validate/{categoryId}")
     public ResponseEntity<Planning> validateCategoryAlreadyExistsWithinMonth(@PathVariable("categoryId") Long categoryId,
                                                                              @PathParam("date") Date date) {
@@ -126,5 +101,31 @@ public class PlanningController extends AbstractController<Planning, Long, Plann
         Planning planning = planningOptional.isPresent() ? planningOptional.get() : new Planning();;
 
         return new ResponseEntity<>(planning, HttpStatus.OK);
+    }
+
+    @PutMapping("{id}")
+    @Override
+    public ResponseEntity<Planning> update(@Valid @RequestBody Planning planning, @PathVariable("id") Long id) {
+
+        Calendar calendar = new GregorianCalendar();
+        calendar.setTime(planning.getDate());
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH) + 1;
+
+        QPlanning qPlanning = QPlanning.planning;
+        YearMonth yearMonth = YearMonth.of(year,month);
+        LocalDate firstOfMonth = yearMonth.atDay( 1 );
+        LocalDate last = yearMonth.atEndOfMonth();
+
+        Predicate predicate = qPlanning.date.between(java.sql.Date.valueOf(firstOfMonth), java.sql.Date.valueOf(last))
+            .and(qPlanning.category.id.eq(planning.getCategory().getId()));
+
+        Optional<Planning> planningOptional = planningService.getByPredicate(predicate);
+        if(planningOptional.isPresent()) {
+            throw new PlanningAlreadyExistsWithinMonth("There is already the selected category within the month");
+        }
+
+        planning.setId(id);
+        return new ResponseEntity<>(service.save(planning), HttpStatus.OK);
     }
 }
