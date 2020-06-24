@@ -5,7 +5,6 @@ import com.meriga.mfinance.domain.QPlanning;
 import com.meriga.mfinance.exception.PlanningAlreadyExistsWithinMonth;
 import com.meriga.mfinance.service.PlanningService;
 import com.querydsl.core.types.Predicate;
-import net.bytebuddy.implementation.bytecode.Throw;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +16,6 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Nullable;
-import javax.persistence.EntityExistsException;
 import javax.validation.Valid;
 import javax.websocket.server.PathParam;
 import java.sql.Date;

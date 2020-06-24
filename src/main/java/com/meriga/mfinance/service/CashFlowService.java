@@ -3,6 +3,7 @@ package com.meriga.mfinance.service;
 
 import com.meriga.mfinance.domain.CashFlow;
 import com.meriga.mfinance.repository.CashFlowRepository;
+import com.meriga.mfinance.repository.FinanceStatisticsRepository;
 import com.querydsl.core.types.Predicate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
