@@ -1,8 +1,10 @@
 package com.meriga.mfinance.controller;
 
-import com.meriga.mfinance.dto.AverageExpenses;
+import com.meriga.mfinance.dto.AverageExpensesDto;
 import com.meriga.mfinance.dto.ExpenseStatisticsDto;
+import com.meriga.mfinance.dto.PlanningPercentagesDto;
 import com.meriga.mfinance.repository.FinanceStatisticsRepository;
+import com.meriga.mfinance.service.FinanceStatisticsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,17 +26,22 @@ public class FinanceStatisticsController {
     private final Logger log = LoggerFactory.getLogger(FinanceStatisticsController.class);
 
     @Autowired
-    private FinanceStatisticsRepository financeStatisticsRepository;
+    private FinanceStatisticsService financeStatisticsService;
 
 
     @GetMapping(value = "expenses")
-    public ResponseEntity<List<ExpenseStatisticsDto>> testStatistics(@PathParam("date") Date date) {
-        return new ResponseEntity<>(financeStatisticsRepository.getExpenseStatistics(date), HttpStatus.OK);
+    public ResponseEntity<List<ExpenseStatisticsDto>> getExpensesStatistics(@PathParam("date") Date date) {
+        return new ResponseEntity<>(financeStatisticsService.getExpensesStatistics(date), HttpStatus.OK);
     }
 
     @GetMapping(value = "last-months/{number}")
-    public ResponseEntity<List<AverageExpenses>> testStatistics(@PathVariable("number") int id) {
-        return new ResponseEntity<>(financeStatisticsRepository.getAverageExpensesOverPlanningsOnLastMonths(id), HttpStatus.OK);
+    public ResponseEntity<List<AverageExpensesDto>> getAverageExpensesOverPlanningsOnLastMonths(@PathVariable("number") int id) {
+        return new ResponseEntity<>(financeStatisticsService.getAverageExpensesOverPlanningsOnLastMonths(id), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "percentages")
+    public ResponseEntity<List<PlanningPercentagesDto>> getPlanningSpentPercentagesForCurrentMonth() {
+        return new ResponseEntity<>(financeStatisticsService.getPlanningSpentPercentagesForCurrentMonth(), HttpStatus.OK);
     }
 
 }

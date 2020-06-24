@@ -1,7 +1,9 @@
 package com.meriga.mfinance.service;
 
 
+import com.meriga.mfinance.dto.AverageExpensesDto;
 import com.meriga.mfinance.dto.ExpenseStatisticsDto;
+import com.meriga.mfinance.dto.PlanningPercentagesDto;
 import com.meriga.mfinance.repository.FinanceStatisticsRepository;
 import com.meriga.mfinance.repository.PlanningRepository;
 import org.slf4j.Logger;
@@ -28,5 +30,12 @@ public class FinanceStatisticsService {
     }
 
 
+    public List<AverageExpensesDto> getAverageExpensesOverPlanningsOnLastMonths(int numberOfMonths) {
+        return this.financeStatisticsRepository.getAverageExpensesOverPlanningsOnLastMonths(numberOfMonths);
+    }
+
+    public List<PlanningPercentagesDto> getPlanningSpentPercentagesForCurrentMonth() {
+        return this.financeStatisticsRepository.getPlanningSpentPercentagesForCurrentMonth();
+    }
 
 }

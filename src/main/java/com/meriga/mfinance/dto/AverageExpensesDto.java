@@ -6,14 +6,14 @@ import lombok.Data;
 import java.math.BigDecimal;
 
 @Data
-public class AverageExpenses {
+public class AverageExpensesDto {
 
     private Long id;
     private String name;
     private BigDecimal average;
     private int numberOfMonths;
 
-    public AverageExpenses(Long id, String name, BigDecimal average, int numberOfMonths) {
+    public AverageExpensesDto(Long id, String name, BigDecimal average, int numberOfMonths) {
         this.id = id;
         this.name = name;
         this.average = average;

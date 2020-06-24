@@ -1,7 +1,8 @@
 package com.meriga.mfinance.repository;
 
-import com.meriga.mfinance.dto.AverageExpenses;
+import com.meriga.mfinance.dto.AverageExpensesDto;
 import com.meriga.mfinance.dto.ExpenseStatisticsDto;
+import com.meriga.mfinance.dto.PlanningPercentagesDto;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -58,7 +59,7 @@ public class FinanceStatisticsRepositoryImpl implements FinanceStatisticsReposit
     }
 
     @Override
-    public List<AverageExpenses> getAverageExpensesOverPlanningsOnLastMonths(int numberOfMonths) {
+    public List<AverageExpensesDto> getAverageExpensesOverPlanningsOnLastMonths(int numberOfMonths) {
         String sql = "select pl.category_id as id, ct.name, avg(pl.value) as average from planning pl " +
             "inner join category ct on pl.category_id = ct.id " +
             " where date > DATE_SUB(last_day(now()), INTERVAL "+ numberOfMonths + " MONTH) group by pl.category_id;";
@@ -66,12 +67,40 @@ public class FinanceStatisticsRepositoryImpl implements FinanceStatisticsReposit
         Query q = em.createNativeQuery(sql, Tuple.class);
 
         List<Tuple> tuples = q.getResultList();
-        List<AverageExpenses> result = tuples.stream().map(
-            t -> new AverageExpenses(
+        List<AverageExpensesDto> result = tuples.stream().map(
+            t -> new AverageExpensesDto(
                 ((BigInteger) t.get("id")).longValue(),
                 (t.get("name")).toString(),
                 (BigDecimal)t.get("average"),
                 numberOfMonths
+            )
+        ).collect(Collectors.toList());
+
+        return result;
+    }
+
+    @Override
+    public List<PlanningPercentagesDto> getPlanningSpentPercentagesForCurrentMonth() {
+        String sql = "select pl.id, " +
+            "ct.name as category_name, " +
+            "pl.value as planned_value, " +
+            "( " +
+            "  select (sum(value)/pl.value)*100 from cash_flow cf where cf.category_id = pl.category_id " +
+            "    and cf.date between first_day(pl.date) and last_day(pl.date) " +
+            "  " +
+            ") as percentage " +
+            "from planning pl inner join category ct on pl.category_id = ct.id " +
+            "where pl.date between first_day(now()) and last_day(now());";
+
+        Query q = em.createNativeQuery(sql, Tuple.class);
+
+        List<Tuple> tuples = q.getResultList();
+        List<PlanningPercentagesDto> result = tuples.stream().map(
+            t -> new PlanningPercentagesDto(
+                ((BigInteger) t.get("id")).longValue(),
+                (t.get("category_name")).toString(),
+                (BigDecimal)t.get("planned_value"),
+                (BigDecimal)t.get("percentage")
             )
         ).collect(Collectors.toList());
 
