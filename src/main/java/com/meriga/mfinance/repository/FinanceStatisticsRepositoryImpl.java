@@ -60,9 +60,9 @@ public class FinanceStatisticsRepositoryImpl implements FinanceStatisticsReposit
 
     @Override
     public List<AverageExpensesDto> getAverageExpensesOverPlanningsOnLastMonths(int numberOfMonths) {
-        String sql = "select pl.category_id as id, ct.name, avg(pl.value) as average from planning pl " +
-            "inner join category ct on pl.category_id = ct.id " +
-            " where date > DATE_SUB(last_day(now()), INTERVAL "+ numberOfMonths + " MONTH) group by pl.category_id;";
+        String sql = "select cf.category_id as id, ct.name, avg(cf.value) as average from cash_flow cf " +
+            "inner join category ct on cf.category_id = ct.id " +
+            " where cf.date > DATE_SUB(last_day(now()), INTERVAL "+ numberOfMonths + " MONTH) group by cf.category_id;";
 
         Query q = em.createNativeQuery(sql, Tuple.class);
 
@@ -84,11 +84,11 @@ public class FinanceStatisticsRepositoryImpl implements FinanceStatisticsReposit
         String sql = "select pl.id, " +
             "ct.name as category_name, " +
             "pl.value as planned_value, " +
-            "( " +
+            "ifnull(( " +
             "  select (sum(value)/pl.value)*100 from cash_flow cf where cf.category_id = pl.category_id " +
             "    and cf.date between first_day(pl.date) and last_day(pl.date) " +
             "  " +
-            ") as percentage " +
+            "),0) as percentage " +
             "from planning pl inner join category ct on pl.category_id = ct.id " +
             "where pl.date between first_day(now()) and last_day(now());";
 
