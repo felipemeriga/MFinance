@@ -15,6 +15,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 
 import javax.annotation.PostConstruct;
 import java.net.InetAddress;
@@ -23,6 +24,7 @@ import java.util.Arrays;
 import java.util.Collection;
 
 @SpringBootApplication
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 @EnableConfigurationProperties({LiquibaseProperties.class, ApplicationProperties.class})
 public class MFinanceApp {
 

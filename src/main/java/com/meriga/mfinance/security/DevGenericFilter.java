@@ -1,0 +1,35 @@
+package com.meriga.mfinance.security;
+
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.filter.GenericFilterBean;
+
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+
+public class DevGenericFilter extends GenericFilterBean {
+    @Override
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain) throws IOException, ServletException {
+        Authentication authentication = null;
+
+        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken
+            = new UsernamePasswordAuthenticationToken("dev", "");
+
+        usernamePasswordAuthenticationToken.setAuthenticated(true);
+        SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+
+        // Handler for CORS filter, for Development Phase, remove this to prod environment
+        HttpServletResponse resp = (HttpServletResponse) response;
+        resp.setHeader("Access-Control-Allow-Origin", "*");
+        resp.setHeader("Access-Control-Allow-Methods", "POST, PUT, GET, OPTIONS, DELETE");
+        resp.setHeader("Access-Control-Max-Age", "3600");
+        resp.setHeader("Access-Control-Allow-Headers", "Authorization, Content-Type");
+
+        filterChain.doFilter(request,response);
+    }
+}

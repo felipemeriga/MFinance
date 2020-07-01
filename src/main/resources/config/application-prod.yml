@@ -64,6 +64,27 @@ spring:
   thymeleaf:
     cache: true
 
+com:
+  ixortalk:
+    security:
+      jwt:
+        aws:
+          userPoolId: "us-east-1_YJGLoYcMz"
+          identityPoolId: "us-east-1:a0959e55-61c9-4185-b908-10b88b89311a"
+          region: "us-east-1"
+urls:
+  cognito: https://mfinance.auth.us-east-1.amazoncognito.com    # cognito root auth url
+
+endpoints:
+  authorize: ${urls.cognito}/login?response_type=code&client_id=${cognito.client}&redirect_uri=${cognito.callback}
+  token: ${urls.cognito}/oauth2/token
+
+cognito:
+  client: 3sv3ov530qu7kottrehnamhbib     # cognito client id
+  secret: f1nefaqvkvoqufkdopfn34oc6gv84ffth2lbkscmpgr8tq3u87d    # cognito client secret
+  callback: http://localhost:3000/callback  # valid callback url set in cognito
+  keys: https://cognito-idp.us-east-1.amazonaws.com/us-east-1_YJGLoYcMz/.well-known/jwks.json      # url for cognito jwt keys
+
 # ===================================================================
 # To enable TLS in production, generate a certificate using:
 # keytool -genkey -alias mfinance -storetype PKCS12 -keyalg RSA -keysize 2048 -keystore keystore.p12 -validity 3650
