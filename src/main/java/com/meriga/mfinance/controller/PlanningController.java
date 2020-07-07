@@ -4,6 +4,7 @@ import com.meriga.mfinance.domain.Planning;
 import com.meriga.mfinance.domain.QPlanning;
 import com.meriga.mfinance.exception.PlanningAlreadyExistsWithinMonth;
 import com.meriga.mfinance.service.PlanningService;
+import com.meriga.mfinance.utils.CurrentSession;
 import com.querydsl.core.types.Predicate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,10 +36,23 @@ public class PlanningController extends AbstractController<Planning, Long, Plann
     @Autowired
     private PlanningService planningService;
 
+    @Autowired
+    private CurrentSession currentSession;
+
     protected PlanningController(PlanningService service) {
         super(service);
     }
 
+    private Predicate getSessionPredicate() {
+        QPlanning qPlanning = QPlanning.planning;
+        return qPlanning.user.id.eq(currentSession.getCurrentUser());
+    }
+
+    @Override
+    public ResponseEntity<Planning> save(Planning entity) {
+        entity.setUser(currentSession.getCurrentUserEntity());
+        return super.save(entity);
+    }
 
 
     /**
@@ -57,7 +71,8 @@ public class PlanningController extends AbstractController<Planning, Long, Plann
         LocalDate last = yearMonth.atEndOfMonth();
 
         Predicate predicate = qPlanning.date.between(java.sql.Date.valueOf(firstOfMonth), java.sql.Date.valueOf(last))
-            .and((qPlanning.category.name.contains(search == null ? "" : search)));
+            .and((qPlanning.category.name.contains(search == null ? "" : search)))
+            .and(getSessionPredicate());
 
         final Page<Planning> page = service.getAll(predicate, pageable);
         return new ResponseEntity<>(page, HttpStatus.OK);
@@ -75,7 +90,8 @@ public class PlanningController extends AbstractController<Planning, Long, Plann
         if (!ObjectUtils.isEmpty(search)) {
             System.out.println(search);
         }
-        final Page<Planning> page = service.getAll(pageable);
+
+        final Page<Planning> page = service.getAll(getSessionPredicate(), pageable);
         return new ResponseEntity<>(page, HttpStatus.OK);
     }
 
@@ -93,12 +109,20 @@ public class PlanningController extends AbstractController<Planning, Long, Plann
         LocalDate last = yearMonth.atEndOfMonth();
 
         Predicate predicate = qPlanning.date.between(java.sql.Date.valueOf(firstOfMonth), java.sql.Date.valueOf(last))
-            .and(qPlanning.category.id.eq(categoryId));
+            .and(qPlanning.category.id.eq(categoryId))
+            .and(getSessionPredicate());
 
         Optional<Planning> planningOptional = planningService.getByPredicate(predicate);
         Planning planning = planningOptional.isPresent() ? planningOptional.get() : new Planning();;
 
         return new ResponseEntity<>(planning, HttpStatus.OK);
+    }
+
+    @GetMapping("test/{id}")
+    public ResponseEntity<Page<Planning>> test(Pageable pageable, @PathVariable("id") Long id) {
+        final Iterable<Planning> page = service.test(getSessionPredicate());
+
+        return null;
     }
 
     @PutMapping("{id}")
@@ -116,7 +140,8 @@ public class PlanningController extends AbstractController<Planning, Long, Plann
         LocalDate last = yearMonth.atEndOfMonth();
 
         Predicate predicate = qPlanning.date.between(java.sql.Date.valueOf(firstOfMonth), java.sql.Date.valueOf(last))
-            .and(qPlanning.category.id.eq(planning.getCategory().getId()));
+            .and(qPlanning.category.id.eq(planning.getCategory().getId()))
+            .and(getSessionPredicate());
 
         Optional<Planning> planningOptional = planningService.getByPredicate(predicate);
         if(planningOptional.isPresent()) {

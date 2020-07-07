@@ -23,7 +23,6 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "user")
-@org.springframework.data.elasticsearch.annotations.Document(indexName = "user")
 public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -40,6 +39,10 @@ public class User implements Serializable {
     @Size(min = 5, max = 254)
     @Column(length = 254, unique = true)
     private String email;
+
+
+    public User() {
+    }
 
     public User(String id, String name, String email) {
         this.id = id;

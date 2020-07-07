@@ -3,6 +3,7 @@ package com.meriga.mfinance.service;
 import com.meriga.mfinance.domain.AbstractEntity;
 import com.meriga.mfinance.repository.CommonRepository;
 import com.querydsl.core.types.Predicate;
+import com.querydsl.core.types.dsl.PathBuilder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

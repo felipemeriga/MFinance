@@ -25,10 +25,6 @@ public class DevGenericFilter extends GenericFilterBean {
 
         // Handler for CORS filter, for Development Phase, remove this to prod environment
         HttpServletResponse resp = (HttpServletResponse) response;
-        resp.setHeader("Access-Control-Allow-Origin", "*");
-        resp.setHeader("Access-Control-Allow-Methods", "POST, PUT, GET, OPTIONS, DELETE");
-        resp.setHeader("Access-Control-Max-Age", "3600");
-        resp.setHeader("Access-Control-Allow-Headers", "Authorization, Content-Type");
 
         filterChain.doFilter(request,response);
     }

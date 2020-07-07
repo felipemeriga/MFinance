@@ -2,7 +2,9 @@ package com.meriga.mfinance.controller;
 
 import com.meriga.mfinance.domain.Category;
 import com.meriga.mfinance.domain.QCategory;
+import com.meriga.mfinance.domain.QPlanning;
 import com.meriga.mfinance.service.CategoryService;
+import com.meriga.mfinance.utils.CurrentSession;
 import io.github.jhipster.web.util.PaginationUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,6 +35,15 @@ public class CategoryController extends AbstractController<Category, Long, Categ
     @Autowired
     private CategoryService categoryService;
 
+    @Autowired
+    private CurrentSession currentSession;
+
+    private Predicate getSessionPredicate() {
+        QCategory qCategory = QCategory.category;
+        return qCategory.user.id.eq(currentSession.getCurrentUser());
+    }
+
+
     protected CategoryController(CategoryService service) {
         super(service);
     }
@@ -48,7 +59,8 @@ public class CategoryController extends AbstractController<Category, Long, Categ
     public ResponseEntity<Page<Category>> list(@Nullable @PathParam("search") String search, Pageable pageable) {
         if (!ObjectUtils.isEmpty(search)) {
             QCategory qCategory = QCategory.category;
-            Predicate predicate = qCategory.name.containsIgnoreCase(search);
+            Predicate predicate = qCategory.name.containsIgnoreCase(search)
+                .and(getSessionPredicate());
             final Page<Category> page = service.getAll(predicate, pageable);
             return new ResponseEntity<>(page, HttpStatus.OK);
         }
@@ -65,8 +77,10 @@ public class CategoryController extends AbstractController<Category, Long, Categ
     @Override
     public ResponseEntity<Category> save(@Valid @RequestBody Category category) {
         QCategory qCategory = QCategory.category;
-        Predicate predicate = qCategory.name.eq(category.getName());
+        Predicate predicate = qCategory.name.eq(category.getName())
+            .and(getSessionPredicate());
         Optional<Category> categoryOptional = categoryService.getByPredicate(predicate);
+        category.setUser(currentSession.getCurrentUserEntity());
         if (categoryOptional.isPresent())
             throw new EntityExistsException("The category with the current name, " + category.getName() + " already" +
                 "exists");
