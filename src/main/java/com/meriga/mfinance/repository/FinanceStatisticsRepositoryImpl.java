@@ -3,6 +3,8 @@ package com.meriga.mfinance.repository;
 import com.meriga.mfinance.dto.AverageExpensesDto;
 import com.meriga.mfinance.dto.ExpenseStatisticsDto;
 import com.meriga.mfinance.dto.PlanningPercentagesDto;
+import com.meriga.mfinance.utils.CurrentSession;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -19,9 +21,12 @@ public class FinanceStatisticsRepositoryImpl implements FinanceStatisticsReposit
     @PersistenceContext
     EntityManager em;
 
+    @Autowired
+    private CurrentSession currentSession;
 
     @Override
     public List<ExpenseStatisticsDto> getExpenseStatistics(Date date) {
+        String currentUser = currentSession.getCurrentUser();
         String sql =
             "select pl.id, pl.category_id as category_id, " +
                 "ct.name as category_name, " +
@@ -37,7 +42,8 @@ public class FinanceStatisticsRepositoryImpl implements FinanceStatisticsReposit
                 "    and cf.date between first_day(pl.date) and last_day(pl.date)" +
                 ") as remaining_value " +
                 "from planning pl inner join category ct on pl.category_id = ct.id " +
-                "where pl.date between first_day('" + date.toString() +"') and last_day('" + date.toString() +"');";
+                "where pl.date between first_day('" + date.toString() +"') and last_day('" + date.toString() +"') " +
+                "and pl.user_id = '" + currentUser + "'";
 
         Query q = em.createNativeQuery(sql, Tuple.class);
 
@@ -60,9 +66,13 @@ public class FinanceStatisticsRepositoryImpl implements FinanceStatisticsReposit
 
     @Override
     public List<AverageExpensesDto> getAverageExpensesOverPlanningsOnLastMonths(int numberOfMonths) {
+        String currentUser = currentSession.getCurrentUser();
         String sql = "select cf.category_id as id, ct.name, avg(cf.value) as average from cash_flow cf " +
             "inner join category ct on cf.category_id = ct.id " +
-            " where cf.date > DATE_SUB(last_day(now()), INTERVAL "+ numberOfMonths + " MONTH) group by cf.category_id;";
+            " where cf.date > DATE_SUB(last_day(now()), INTERVAL "+ numberOfMonths + " MONTH) " +
+            "and cf.user_id = '" + currentUser + "' " +
+            "group by cf.category_id;";
+
 
         Query q = em.createNativeQuery(sql, Tuple.class);
 
@@ -81,6 +91,7 @@ public class FinanceStatisticsRepositoryImpl implements FinanceStatisticsReposit
 
     @Override
     public List<PlanningPercentagesDto> getPlanningSpentPercentagesForCurrentMonth() {
+        String currentUser = currentSession.getCurrentUser();
         String sql = "select pl.id, " +
             "ct.name as category_name, " +
             "pl.value as planned_value, " +
@@ -90,7 +101,8 @@ public class FinanceStatisticsRepositoryImpl implements FinanceStatisticsReposit
             "  " +
             "),0) as percentage " +
             "from planning pl inner join category ct on pl.category_id = ct.id " +
-            "where pl.date between first_day(now()) and last_day(now());";
+            "where pl.date between first_day(now()) and last_day(now()) " +
+            "and pl.user_id = '" + currentUser + "'";
 
         Query q = em.createNativeQuery(sql, Tuple.class);
 
