@@ -36,11 +36,18 @@ public class CurrentSession {
 
         user.setId(userId);
         user.setEmail(jwtClaimsSet.getClaims().get("email").toString());
-        user.setName(jwtClaimsSet.getClaims().get("name").toString());
+
+        Object name = jwtClaimsSet.getClaims().get("name");
+        if(name == null) {
+            user.setName(userId);
+        } else {
+            user.setName(name.toString());
+        }
 
         if(!optionalUser.isPresent()) {
             userRepository.save(user);
         }
+
         return user;
     }
 

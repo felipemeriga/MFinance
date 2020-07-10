@@ -12,6 +12,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -55,7 +56,10 @@ public class AwsCognitoIdTokenProcessor {
             if (username != null) {
 
                 List<String> groups = (List<String>) claimsSet.getClaims().get(jwtConfiguration.getGroupsField());
-                List<GrantedAuthority> grantedAuthorities = convertList(groups, group -> new SimpleGrantedAuthority(ROLE_PREFIX + group.toUpperCase()));
+                List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
+                if(groups != null) {
+                    grantedAuthorities = convertList(groups, group -> new SimpleGrantedAuthority(ROLE_PREFIX + group.toUpperCase()));
+                }
                 User user = new User(username, EMPTY_PWD, grantedAuthorities);
 
                 jwtIdTokenCredentialsHolder.setIdToken(stripBearerToken(idToken));
