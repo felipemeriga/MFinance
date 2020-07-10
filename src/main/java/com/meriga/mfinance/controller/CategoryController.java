@@ -64,7 +64,7 @@ public class CategoryController extends AbstractController<Category, Long, Categ
             final Page<Category> page = service.getAll(predicate, pageable);
             return new ResponseEntity<>(page, HttpStatus.OK);
         }
-        final Page<Category> page = service.getAll(pageable);
+        final Page<Category> page = service.getAll(getSessionPredicate(), pageable);
         return new ResponseEntity<>(page, HttpStatus.OK);
     }
 

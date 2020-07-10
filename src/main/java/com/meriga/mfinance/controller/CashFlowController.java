@@ -17,6 +17,7 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Nullable;
+import javax.validation.Valid;
 import javax.websocket.server.PathParam;
 import java.sql.Date;
 import java.time.LocalDate;
@@ -46,7 +47,7 @@ public class CashFlowController extends AbstractController<CashFlow,Long, CashFl
     }
 
     @Override
-    public ResponseEntity<CashFlow> save(CashFlow entity) {
+    public ResponseEntity<CashFlow> save(@Valid @RequestBody CashFlow entity) {
         entity.setUser(currentSession.getCurrentUserEntity());
         return super.save(entity);
     }

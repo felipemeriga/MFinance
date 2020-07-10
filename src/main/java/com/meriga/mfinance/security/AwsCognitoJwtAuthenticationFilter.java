@@ -41,39 +41,62 @@ public class AwsCognitoJwtAuthenticationFilter extends GenericFilterBean {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain) throws IOException, ServletException {
 
-        Authentication authentication = null;
-        if (env.acceptsProfiles(Profiles.of(JHipsterConstants.SPRING_PROFILE_PRODUCTION, JHipsterConstants.SPRING_PROFILE_TEST))) {
-            try {
-                authentication = awsCognitoIdTokenProcessor.getAuthentication((HttpServletRequest) request);
+        HttpServletResponse res = (HttpServletResponse) response;
+        HttpServletRequest req = (HttpServletRequest) request;
+        System.out.println("WebConfig; "+req.getRequestURI());
+        res.setHeader("Access-Control-Allow-Origin", "*");
+        res.setHeader("Access-Control-Allow-Methods", "POST, PUT, GET, OPTIONS, DELETE");
+        res.setHeader("Access-Control-Allow-Headers", "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With,observe");
+        res.setHeader("Access-Control-Max-Age", "3600");
+        res.setHeader("Access-Control-Allow-Credentials", "true");
+        res.setHeader("Access-Control-Expose-Headers", "Authorization");
+        res.addHeader("Access-Control-Expose-Headers", "responseType");
+        res.addHeader("Access-Control-Expose-Headers", "observe");
 
-                if (authentication != null) {
-                    SecurityContextHolder.getContext().setAuthentication(authentication);
+        // https://stackoverflow.com/questions/44245588/how-to-send-authorization-header-with-axios
+        System.out.println("Request Method: " + req.getMethod());
+
+        if (!(req.getMethod().equalsIgnoreCase("OPTIONS"))) {
+            Authentication authentication = null;
+            if (env.acceptsProfiles(Profiles.of(JHipsterConstants.SPRING_PROFILE_PRODUCTION, JHipsterConstants.SPRING_PROFILE_TEST))) {
+                try {
+                    authentication = awsCognitoIdTokenProcessor.getAuthentication((HttpServletRequest) request);
+
+                    if (authentication != null) {
+                        SecurityContextHolder.getContext().setAuthentication(authentication);
+                    }
+
+                } catch (Exception e) {
+                    logger.error("Error occured while processing Cognito ID Token", e);
+                    SecurityContextHolder.clearContext();
+                    //return;
+                    //throw new ServletException("Error occured while processing Cognito ID Token",e);
                 }
+            } else {
+                List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
+                User tempUser = new User("dev-user",
+                    "dev",
+                    true, true, true, true, // logging them in...
+                    authorities // type is List<GrantedAuthority>
+                );
+                authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
 
-            } catch (Exception e) {
-                logger.error("Error occured while processing Cognito ID Token", e);
-                SecurityContextHolder.clearContext();
-                //return;
-                //throw new ServletException("Error occured while processing Cognito ID Token",e);
+                authentication = new UsernamePasswordAuthenticationToken(tempUser, "dev", authorities);
+
+                SecurityContextHolder.getContext().setAuthentication(authentication);
             }
+
+            filterChain.doFilter(req,res);
         } else {
-            List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
-            User tempUser = new User("dev-user",
-                "dev",
-                true, true, true, true, // logging them in...
-                authorities // type is List<GrantedAuthority>
-            );
-            authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
-
-            authentication = new UsernamePasswordAuthenticationToken(tempUser, "dev", authorities);
-
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+            System.out.println("Pre-flight");
+            res.setHeader("Access-Control-Allow-Origin", "*");
+            res.setHeader("Access-Control-Allow-Methods", "POST,GET,DELETE,PUT");
+            res.setHeader("Access-Control-Max-Age", "3600");
+            res.setHeader("Access-Control-Allow-Headers", "Access-Control-Expose-Headers"+"Authorization, content-type," +
+                "USERID"+"ROLE"+
+                "access-control-request-headers,access-control-request-method,accept,origin,authorization,x-requested-with,responseType,observe");
+            res.setStatus(HttpServletResponse.SC_OK);
         }
-
-        // Handler for CORS filter, for Development Phase, remove this to prod environment
-        HttpServletResponse resp = (HttpServletResponse) response;
-
-        filterChain.doFilter(request,response);
 
     }
 }

@@ -49,7 +49,7 @@ public class PlanningController extends AbstractController<Planning, Long, Plann
     }
 
     @Override
-    public ResponseEntity<Planning> save(Planning entity) {
+    public ResponseEntity<Planning> save(@Valid @RequestBody Planning entity) {
         entity.setUser(currentSession.getCurrentUserEntity());
         return super.save(entity);
     }
@@ -144,7 +144,7 @@ public class PlanningController extends AbstractController<Planning, Long, Plann
             .and(getSessionPredicate());
 
         Optional<Planning> planningOptional = planningService.getByPredicate(predicate);
-        if(planningOptional.isPresent()) {
+        if(planningOptional.isPresent() && !planningOptional.get().getId().equals(id)) {
             throw new PlanningAlreadyExistsWithinMonth("There is already the selected category within the month");
         }
 
