@@ -2,7 +2,6 @@ package com.meriga.mfinance.controller;
 
 import com.meriga.mfinance.domain.CashFlow;
 import com.meriga.mfinance.domain.QCashFlow;
-import com.meriga.mfinance.domain.QPlanning;
 import com.meriga.mfinance.service.CashFlowService;
 import com.meriga.mfinance.utils.CurrentSession;
 import com.querydsl.core.types.Predicate;

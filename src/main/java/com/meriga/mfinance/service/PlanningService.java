@@ -3,9 +3,7 @@ package com.meriga.mfinance.service;
 
 import com.meriga.mfinance.domain.Planning;
 import com.meriga.mfinance.repository.PlanningRepository;
-import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Predicate;
-import com.querydsl.core.types.dsl.BooleanExpression;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.util.Objects;
 
 
 /**

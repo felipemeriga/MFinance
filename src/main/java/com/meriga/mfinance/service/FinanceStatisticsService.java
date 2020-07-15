@@ -5,7 +5,6 @@ import com.meriga.mfinance.dto.AverageExpensesDto;
 import com.meriga.mfinance.dto.ExpenseStatisticsDto;
 import com.meriga.mfinance.dto.PlanningPercentagesDto;
 import com.meriga.mfinance.repository.FinanceStatisticsRepository;
-import com.meriga.mfinance.repository.PlanningRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

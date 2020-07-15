@@ -1,7 +1,6 @@
 package com.meriga.mfinance.controller;
 
 import com.meriga.mfinance.domain.AbstractEntity;
-import com.meriga.mfinance.domain.Category;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;

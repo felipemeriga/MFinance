@@ -23,7 +23,6 @@
  */
 package com.meriga.mfinance.security;
 
-import org.springframework.context.annotation.Profile;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;

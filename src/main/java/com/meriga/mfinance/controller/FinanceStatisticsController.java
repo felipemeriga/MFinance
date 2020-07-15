@@ -3,7 +3,6 @@ package com.meriga.mfinance.controller;
 import com.meriga.mfinance.dto.AverageExpensesDto;
 import com.meriga.mfinance.dto.ExpenseStatisticsDto;
 import com.meriga.mfinance.dto.PlanningPercentagesDto;
-import com.meriga.mfinance.repository.FinanceStatisticsRepository;
 import com.meriga.mfinance.service.FinanceStatisticsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

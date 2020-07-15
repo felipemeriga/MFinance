@@ -1,6 +1,5 @@
 package com.meriga.mfinance.exception;
 
-import com.meriga.mfinance.controller.CategoryController;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.exception.ConstraintViolationException;
 import org.slf4j.Logger;

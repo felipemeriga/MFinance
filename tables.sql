@@ -6,7 +6,7 @@ category_id bigint NOT NULL, updated_when datetime not null, user_id VARCHAR(50)
  FOREIGN KEY (category_id) REFERENCES category(id), FOREIGN KEY (user_id) REFERENCES user(id));
 
 create table cash_flow (id bigint AUTO_INCREMENT PRIMARY KEY, name VARCHAR(50) NOT NULL, value DECIMAL(10,2),
-category_id bigint NOT NULL, flow VARCHAR(10) NOT NULL, date DATE NOT NULL, user_id VARCHAR(50)
+category_id bigint NOT NULL, flow VARCHAR(10) NOT NULL, date DATE NOT NULL, user_id VARCHAR(50),
 FOREIGN KEY (category_id) REFERENCES category(id),
 FOREIGN KEY (user_id) REFERENCES user(id));
 

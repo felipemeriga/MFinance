@@ -5,7 +5,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Profile;
 import org.springframework.core.env.Environment;
 import org.springframework.core.env.Profiles;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -74,7 +73,7 @@ public class AwsCognitoJwtAuthenticationFilter extends GenericFilterBean {
                 }
             } else {
                 List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
-                User tempUser = new User("dev-user",
+                User tempUser = new User("dev",
                     "dev",
                     true, true, true, true, // logging them in...
                     authorities // type is List<GrantedAuthority>
