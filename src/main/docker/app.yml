@@ -5,18 +5,14 @@ services:
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod
-      - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
+#      - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
       - SPRING_DATASOURCE_URL=jdbc:mysql://mfinance-mysql:3306/mfinance?useUnicode=true&characterEncoding=utf8&useSSL=false&createDatabaseIfNotExist=true
       - JHIPSTER_SLEEP=30 # gives time for other services to boot before the application
-      - SPRING_DATA_JEST_URI=http://mfinance-elasticsearch:9200
-      - SPRING_ELASTICSEARCH_REST_URIS=http://mfinance-elasticsearch:9200
+#      - SPRING_DATA_JEST_URI=http://mfinance-elasticsearch:9200
+#      - SPRING_ELASTICSEARCH_REST_URIS=http://mfinance-elasticsearch:9200
     ports:
       - 8080:8080
   mfinance-mysql:
     extends:
       file: mysql.yml
       service: mfinance-mysql
-  mfinance-elasticsearch:
-    extends:
-      file: elasticsearch.yml
-      service: mfinance-elasticsearch

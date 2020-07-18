@@ -37,4 +37,8 @@ public class FinanceStatisticsService {
         return this.financeStatisticsRepository.getPlanningSpentPercentagesForCurrentMonth();
     }
 
+    public Boolean checkForUserTour() {
+        return this.financeStatisticsRepository.checkForUserTour();
+    }
+
 }

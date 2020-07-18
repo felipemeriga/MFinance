@@ -14,4 +14,6 @@ public interface FinanceStatisticsRepositoryCustom {
     List<AverageExpensesDto> getAverageExpensesOverPlanningsOnLastMonths(int numberOfNumbers);
 
     List<PlanningPercentagesDto> getPlanningSpentPercentagesForCurrentMonth();
+
+    Boolean checkForUserTour();
 }

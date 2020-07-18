@@ -118,4 +118,20 @@ public class FinanceStatisticsRepositoryImpl implements FinanceStatisticsReposit
 
         return result;
     }
+
+    @Override
+    public Boolean checkForUserTour() {
+        String currentUser = currentSession.getCurrentUser();
+        String sql = "select ifnull( (select distinct(case when ct.user_id is not null " +
+            " then 'true' " +
+            "    end) as bool " +
+            "    from category ct inner join user u " +
+            " on u.id = ct.user_id where ct.user_id = '" + currentUser + "'), 'false') as bool;";
+
+        Query q = em.createNativeQuery(sql, Tuple.class);
+
+        Object result = q.getSingleResult();
+
+        return (Boolean) result;
+    }
 }

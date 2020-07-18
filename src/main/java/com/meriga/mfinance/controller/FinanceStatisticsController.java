@@ -43,4 +43,9 @@ public class FinanceStatisticsController {
         return new ResponseEntity<>(financeStatisticsService.getPlanningSpentPercentagesForCurrentMonth(), HttpStatus.OK);
     }
 
+    @GetMapping(value = "tour")
+    public ResponseEntity<Boolean> checkForUserTour() {
+        return new ResponseEntity<>(financeStatisticsService.checkForUserTour(), HttpStatus.OK);
+    }
+
 }
