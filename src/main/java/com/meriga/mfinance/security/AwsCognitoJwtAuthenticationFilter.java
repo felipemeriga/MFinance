@@ -42,7 +42,7 @@ public class AwsCognitoJwtAuthenticationFilter extends GenericFilterBean {
 
         HttpServletResponse res = (HttpServletResponse) response;
         HttpServletRequest req = (HttpServletRequest) request;
-        System.out.println("WebConfig; "+req.getRequestURI());
+        logger.debug("WebConfig; "+req.getRequestURI());
         res.setHeader("Access-Control-Allow-Origin", "*");
         res.setHeader("Access-Control-Allow-Methods", "POST, PUT, GET, OPTIONS, DELETE");
         res.setHeader("Access-Control-Allow-Headers", "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With,observe");
@@ -53,7 +53,7 @@ public class AwsCognitoJwtAuthenticationFilter extends GenericFilterBean {
         res.addHeader("Access-Control-Expose-Headers", "observe");
 
         // https://stackoverflow.com/questions/44245588/how-to-send-authorization-header-with-axios
-        System.out.println("Request Method: " + req.getMethod());
+        logger.debug("Request Method: " + req.getMethod());
 
         if (!(req.getMethod().equalsIgnoreCase("OPTIONS"))) {
             Authentication authentication = null;
@@ -87,7 +87,7 @@ public class AwsCognitoJwtAuthenticationFilter extends GenericFilterBean {
 
             filterChain.doFilter(req,res);
         } else {
-            System.out.println("Pre-flight");
+            logger.debug("Pre-flight");
             res.setHeader("Access-Control-Allow-Origin", "*");
             res.setHeader("Access-Control-Allow-Methods", "POST,GET,DELETE,PUT");
             res.setHeader("Access-Control-Max-Age", "3600");
